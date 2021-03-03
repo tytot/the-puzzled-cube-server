@@ -1,0 +1,23 @@
+{
+  "name": "the-puzzled-cube-server",
+  "version": "1.0.0",
+  "description": "Leaderboard server for The Puzzled Cube",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tytot/the-puzzled-cube-server.git"
+  },
+  "author": "Tyler Lin",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/tytot/the-puzzled-cube-server/issues"
+  },
+  "homepage": "https://github.com/tytot/the-puzzled-cube-server#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sqlite3": "^5.0.2"
+  }
+}
