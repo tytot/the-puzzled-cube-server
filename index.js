@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 6969
+const port = 42069
 
 app.use(express.json())
 
