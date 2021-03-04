@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
 const port = 42069
 
@@ -12,7 +13,7 @@ const db = new sqlite3.Database('sqlite.db', (err) => {
     }
     console.log('Connected to sqlite database.')
     db.run(
-        'CREATE TABLE IF NOT EXISTS leaderboard (name TEXT NOT NULL, time INTEGER NOT NULL CHECK (time > 0));',
+        'CREATE TABLE IF NOT EXISTS leaderboard (name TEXT NOT NULL, time INTEGER NOT NULL CHECK (time > 0), date TEXT NOT NULL);',
         (err) => {
             if (err) {
                 console.error(err)
@@ -27,8 +28,8 @@ app.get('/', (req, res) => {
     res.send('regard')
 })
 
-app.get('/leaderboard', (req, res) => {
-    db.all('SELECT * FROM leaderboard ORDER BY time', (err, rows) => {
+app.get('/leaderboard', cors(), (req, res) => {
+    db.all('SELECT * FROM leaderboard ORDER BY time, date', (err, rows) => {
         if (err) {
             console.error(err)
             process.exit(1)
@@ -41,13 +42,17 @@ app.post('/leaderboard', (req, res) => {
     if (!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('time')) {
         res.status(400).send('Invalid request.')
     } else {
-        db.run('INSERT INTO leaderboard (name, time) VALUES (?, ?)', [req.body.name, req.body.time], (err) => {
-            if (err) {
-                console.error(err)
-                process.exit(1)
+        db.run(
+            'INSERT INTO leaderboard (name, time, date) VALUES (?, ?, ?)',
+            [req.body.name, req.body.time, new Date().toISOString()],
+            (err) => {
+                if (err) {
+                    console.error(err)
+                    process.exit(1)
+                }
+                res.send('Success.')
             }
-            res.send('Success.')
-        })
+        )
     }
 })
 
